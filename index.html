@@ -5,7 +5,10 @@
 </head>
 <body onload="zaklad()">
 
-<script>
+
+<input itype="text" size="40">
+    
+    <script>
 //vykreslíme si nějaký interface
 
 function zaklad()  {
@@ -13,15 +16,25 @@ function zaklad()  {
     let t = document.createElement("TITLE");
     let h = document.createTextNode("WWWAP2025ZS-nemecmiros");
     
-t.appendChild(h);
-document.head.appendChild(t);
-
-
-document.body.style.backgroundColor = "black";
+    t.appendChild(h);
+    document.head.appendChild(t);
+    
+    
+    document.body.style.backgroundColor = "white";
+    
+    
+    let policko1 =  document.createElement("input");
+    policko1.setAttribute('type', 'text');
+    
+    let policko2 =  document.createElement("input");
+    policko2.setAttribute('type', 'file');
+    
+    
+    document.body.appendChild(policko1);
+    
+    document.body.appendChild(policko2);
+    
 }
-
-
-
     
 </script>
     
