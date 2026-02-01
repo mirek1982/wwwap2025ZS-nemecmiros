@@ -11,6 +11,9 @@
     <script>
 //vykreslíme si nějaký interface
 
+var predanejmeno;
+
+
 function zaklad()  {
     
     let t = document.createElement("TITLE");
@@ -23,7 +26,17 @@ function zaklad()  {
     document.body.style.backgroundColor = "white";
     
     
-    let p1 = document.createElement("p");
+    const br = document.createElement("BR");
+    let div1 = document.createElement("div");
+   
+   //let f1 = document.createElement("form");
+    //f1.setAttribute('name','formular');
+    //f1.setAttribute('id','formular');
+   // f1.setAttribute('method','POST');
+    //f1.setAttribute('enctype','multipart/form-data');
+   
+    //f1.setAttribute('action','index.html');
+    
     const node1 = document.createTextNode("jméno :  ");
     
     let policko1 =  document.createElement("input");
@@ -32,15 +45,16 @@ function zaklad()  {
     policko1.setAttribute('id','jmeno');
     policko1.setAttribute('placeholder','jmeno');
     
-    p1.appendChild(node1);
-    p1.appendChild(policko1);
-    document.body.appendChild(p1);
+    //div1.appendChild(f1);
+    div1.appendChild(node1);
+    div1.appendChild(policko1);
+    
+    policko1.after(br);
     
     
     
     
-    
-    let p2 = document.createElement("p");
+    //let p2 = document.createElement("p");
     const node2 = document.createTextNode("fotografie :  ");
     
     let policko2 =  document.createElement("input");
@@ -48,11 +62,127 @@ function zaklad()  {
     policko2.setAttribute('name','fotka');
     policko2.setAttribute('id','fotka');
     
-    p2.appendChild(node2);
-    p2.appendChild(policko2);
-    document.body.appendChild(p2);
+    div1.appendChild(node2);
+    div1.appendChild(policko2);
+  
+//policko2.after(br);
+    
+    //let policko3 =  document.createElement("input");
+   // policko3.setAttribute('type', 'submit');
+    //policko3.setAttribute('name','submit');
+    //policko3.setAttribute('id','submit');
+    
+   
+   
+   
+  // f1.appendChild(policko3);
+
+   document.body.appendChild(div1);
+
+   
+   document.getElementById("jmeno").addEventListener('change', doText, false);
+  
+       document.getElementById("fotka").addEventListener('change', doFile, false);
+ 
+
+   
+ 
+  
+
+  
+
+   initDb();
+    
     
 }
+    
+    let db;
+    let dbVersion = 1;
+    let dbReady = false;
+
+
+
+    function initDb() {
+        let request = indexedDB.open('kartoteka', dbVersion);
+
+        request.onerror = function(e) {
+            console.error('Unable to open database.');
+        }
+
+        request.onsuccess = function(e) {
+            db = e.target.result;
+            console.log('db opened');
+        }
+
+        request.onupgradeneeded = function(e) {
+            let db = e.target.result;
+            db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
+            dbReady = true;
+        }
+    }
+
+ function doText(par) {
+     
+     predanejmeno =  par.target.value;
+     
+ }
+
+        
+        
+        
+        
+    function doFile(e) {
+        console.log('change event fired for input field');
+        let file = e.target.files[0];
+        
+
+
+        var reader = new FileReader();
+//                reader.readAsDataURL(file);
+        reader.readAsBinaryString(file);
+
+        reader.onload = function(e) {
+            //alert(e.target.result);
+            let bits = e.target.result;
+            let ob = {
+                jmeno:predanejmeno,
+                created:new Date(),
+                data:bits
+            };
+
+            let trans = db.transaction(['cachedForms'], 'readwrite');
+            let addReq = trans.objectStore('cachedForms').add(ob);
+
+            addReq.onerror = function(e) {
+                console.log('error storing data');
+                console.error(e);
+            }
+
+            trans.oncomplete = function(e) {
+                console.log('data stored');
+            }
+        }
+    }
+
+    function doImageTest() {
+        console.log('doImageTest');
+        let image = document.querySelector('#testImage');
+        let recordToLoad = parseInt(document.querySelector('#recordToLoad').value,10);
+        if(recordToLoad === '') recordToLoad = 1;
+
+        let trans = db.transaction(['cachedForms'], 'readonly');
+        //hard coded id
+        let req = trans.objectStore('cachedForms').get(recordToLoad);
+        req.onsuccess = function(e) {
+            let record = e.target.result;
+            console.log('get success', record);
+            image.src = 'data:image/jpeg;base64,' + btoa(record.data);
+        }
+    }
+    
+    
+    
+    
     
 </script>
     
