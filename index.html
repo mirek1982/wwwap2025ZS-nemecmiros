@@ -93,7 +93,7 @@ function zaklad()  {
 
    initDb();
     
-    
+
 }
     
     let db;
@@ -112,8 +112,36 @@ function zaklad()  {
         request.onsuccess = function(e) {
             db = e.target.result;
             console.log('db opened');
+            
+            
+            
+            const idquery = db.transaction('cachedForms')
+                               .objectStore('cachedForms')
+                               .get(4);
+          
+            //console.log(idquery);
+            idquery.onsuccess = function(){
+               console.log("idquery",idquery.result);
+               let osoba = idquery.result;
+               const para = document.createElement("p");
+               para.style.id = "odstavec1";
+               para.innerHTML=osoba.jmeno;
+               document.body.appendChild(para);
+            
+            let fot = document.createElement("IMG");
+            let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
+             fot.setAttribute("src", odata);
+             fot.setAttribute("width", "304");
+             fot.setAttribute("height", "228");
+             fot.setAttribute("alt", osoba.jmeno);
+             para.appendChild(fot);
+            
         }
 
+            
+        }
+        
+        
         request.onupgradeneeded = function(e) {
             let db = e.target.result;
             db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
@@ -164,21 +192,7 @@ function zaklad()  {
         }
     }
 
-    function doImageTest() {
-        console.log('doImageTest');
-        let image = document.querySelector('#testImage');
-        let recordToLoad = parseInt(document.querySelector('#recordToLoad').value,10);
-        if(recordToLoad === '') recordToLoad = 1;
 
-        let trans = db.transaction(['cachedForms'], 'readonly');
-        //hard coded id
-        let req = trans.objectStore('cachedForms').get(recordToLoad);
-        req.onsuccess = function(e) {
-            let record = e.target.result;
-            console.log('get success', record);
-            image.src = 'data:image/jpeg;base64,' + btoa(record.data);
-        }
-    }
     
     
     
