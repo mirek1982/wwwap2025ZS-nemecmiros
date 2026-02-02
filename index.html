@@ -115,29 +115,75 @@ function zaklad()  {
             
             
             
-            const idquery = db.transaction('cachedForms')
+  
+  //  zjistim si pocatecni  hodnotu  id
+  let objectStore = db.transaction("cachedForms").objectStore("cachedForms");
+  objectStore.openCursor().onsuccess = event => {
+   let cursor = event.target.result;
+     
+    let pocatek = cursor.key;
+    
+   
+   
+ 
+const dotaz = db.transaction('cachedForms')
                                .objectStore('cachedForms')
-                               .get(4);
-          
-            //console.log(idquery);
-            idquery.onsuccess = function(){
-               console.log("idquery",idquery.result);
-               let osoba = idquery.result;
-               const para = document.createElement("p");
-               para.style.id = "odstavec1";
-               para.innerHTML=osoba.jmeno;
-               document.body.appendChild(para);
-            
-            let fot = document.createElement("IMG");
-            let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
-             fot.setAttribute("src", odata);
-             fot.setAttribute("width", "304");
-             fot.setAttribute("height", "228");
-             fot.setAttribute("alt", osoba.jmeno);
-             para.appendChild(fot);
-            
-        }
+                               .count();
+                 
+                                   
+                        dotaz.onsuccess  = function() {
+                            //vytvorim pomocnou konecna ktera mi stanovi posledni id
+                                let konecna = dotaz.result+pocatek;
+                                  
+                                   
+                                   for(let i = pocatek; i<konecna; i++)  {
+                                       
+                                       const idquery = db.transaction('cachedForms')
+                                       .objectStore('cachedForms')
+                                       .get(i);
+                                       
+                                       
+                                       
+                                       //console.log(idquery);
+                                       idquery.onsuccess = function(){
+                                           
+                                           
+                                           
+                                           //  console.log("idquery",idquery.result);
+                                           let osoba = idquery.result;
+                                           const para = document.createElement("p");
+                                           para.style.id = "odstavec1";
+                                           
+                                           //podminka jestli existuje jmeno
+                                           if(!osoba.jmeno)  {
+                                              
+                                            para.innerHTML="noname";
+                                               
+                                           } else {
+                                           para.innerHTML=osoba.jmeno;
+                                         
+                                           }
+                                           
+                                           document.body.appendChild(para);
+                                           let fot = document.createElement("IMG");
+                                           let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
+                                           fot.setAttribute("src", odata);
+                                           fot.setAttribute("width", "304");
+                                           fot.setAttribute("height", "228");
+                                           fot.setAttribute("alt", osoba.jmeno);
+                                           para.appendChild(fot);
+                                           
+                                           
+                                       }
+                                       //konec for cyklu
+                                   }
+                                   
+                                 //konec funkce dotaz
+                               }
 
+            //konec  zjisteni hodnoty id
+                    }
+            
             
         }
         
@@ -149,16 +195,15 @@ function zaklad()  {
         }
     }
 
+        
+        
+ //zde si zpracujem to co jsme si poslali  input textem a predame do promenne
  function doText(par) {
      
      predanejmeno =  par.target.value;
      
  }
-
-        
-        
-        
-        
+//  zde si zpracuju  file a pridam   jmeno a  vlozim do db
     function doFile(e) {
         console.log('change event fired for input field');
         let file = e.target.files[0];
@@ -166,7 +211,7 @@ function zaklad()  {
 
 
         var reader = new FileReader();
-//                reader.readAsDataURL(file);
+
         reader.readAsBinaryString(file);
 
         reader.onload = function(e) {
