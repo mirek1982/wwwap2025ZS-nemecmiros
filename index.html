@@ -11,14 +11,15 @@
     <script>
 //vykreslíme si nějaký interface
 
-var predanejmeno;
 
 
 function zaklad()  {
     
     let t = document.createElement("TITLE");
     let h = document.createTextNode("WWWAP2025ZS-nemecmiros");
-    
+ 
+ let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
+ 
     t.appendChild(h);
     document.head.appendChild(t);
     
@@ -26,16 +27,27 @@ function zaklad()  {
     document.body.style.backgroundColor = "white";
     
     
-    const br = document.createElement("BR");
+    let br = document.createElement("BR");
+    let hr = document.createElement("HR");
+ 
+ 
+    let h1 = document.createElement("h1");
+    
+    document.body.appendChild(h1);
+    h1.appendChild(h);
+    
+    document.body.appendChild(text1);
+    
+    
+ 
     let div1 = document.createElement("div");
    
-   //let f1 = document.createElement("form");
-    //f1.setAttribute('name','formular');
-    //f1.setAttribute('id','formular');
-   // f1.setAttribute('method','POST');
-    //f1.setAttribute('enctype','multipart/form-data');
+   let div2 = document.createElement("div");
+    div2.setAttribute('id','fotobox');
    
-    //f1.setAttribute('action','index.html');
+   
+   let div3 = document.createElement("div");
+    div3.setAttribute('id','top');
     
     const node1 = document.createTextNode("jméno :  ");
     
@@ -45,56 +57,41 @@ function zaklad()  {
     policko1.setAttribute('id','jmeno');
     policko1.setAttribute('placeholder','jmeno');
     
-    //div1.appendChild(f1);
+ 
     div1.appendChild(node1);
     div1.appendChild(policko1);
     
-    policko1.after(br);
+    div1.after(br);
     
     
     
-    
-    //let p2 = document.createElement("p");
+  
     const node2 = document.createTextNode("fotografie :  ");
     
     let policko2 =  document.createElement("input");
     policko2.setAttribute('type', 'file');
     policko2.setAttribute('name','fotka');
     policko2.setAttribute('id','fotka');
-    
-    div1.appendChild(node2);
-    div1.appendChild(policko2);
+ 
+    div2.appendChild(node2);
+    div2.appendChild(policko2);
   
-//policko2.after(br);
-    
-    //let policko3 =  document.createElement("input");
-   // policko3.setAttribute('type', 'submit');
-    //policko3.setAttribute('name','submit');
-    //policko3.setAttribute('id','submit');
-    
-   
-   
-   
-  // f1.appendChild(policko3);
+  
+
 
    document.body.appendChild(div1);
-
+   document.body.appendChild(div2);
+   document.body.appendChild(div3);
+   div3.after(hr);
+   
+   
+   document.getElementById("fotobox").style.display="none";
    
    document.getElementById("jmeno").addEventListener('change', doText, false);
-  
-       document.getElementById("fotka").addEventListener('change', doFile, false);
- 
 
-   
- 
-  
-
-  
 
    initDb();
-    
-
-}
+    }
     
     let db;
     let dbVersion = 1;
@@ -151,8 +148,13 @@ const dotaz = db.transaction('cachedForms')
                                            
                                            //  console.log("idquery",idquery.result);
                                            let osoba = idquery.result;
-                                           const para = document.createElement("p");
-                                           para.style.id = "odstavec1";
+                                           let para = document.createElement("p");
+                                           
+                                           let br = document.createElement("BR");
+                                           let hr = document.createElement("HR");
+                                           para.setAttribute("id", "odstavec"+i);
+                                           para.style.zIndex = "1";
+                                           
                                            
                                            //podminka jestli existuje jmeno
                                            if(!osoba.jmeno)  {
@@ -168,12 +170,27 @@ const dotaz = db.transaction('cachedForms')
                                            let fot = document.createElement("IMG");
                                            let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
                                            fot.setAttribute("src", odata);
-                                           fot.setAttribute("width", "304");
-                                           fot.setAttribute("height", "228");
+                                           fot.setAttribute("width", "300");
+                                           fot.setAttribute("height", "200");
                                            fot.setAttribute("alt", osoba.jmeno);
                                            para.appendChild(fot);
                                            
+                                           let smaz =  document.createElement("button");
+                                           let popis1 = document.createTextNode("smaž");
+                                           smaz.setAttribute('type','button');
+                                           smaz.setAttribute('id','smaz'+i);
+                                           smaz.setAttribute('value',i);
                                            
+                                           smaz.appendChild(popis1);
+                                           
+                                           para.appendChild(smaz);
+                                           
+                                           para.appendChild(br);
+                                         
+                                            document.getElementById('odstavec'+i).appendChild(hr);
+                                            
+                                            document.getElementById("smaz"+i).addEventListener('click', smazZaznam);
+                                          
                                        }
                                        //konec for cyklu
                                    }
@@ -184,59 +201,129 @@ const dotaz = db.transaction('cachedForms')
             //konec  zjisteni hodnoty id
                     }
             
-            
+
+
         }
-        
+    
         
         request.onupgradeneeded = function(e) {
             let db = e.target.result;
             db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
             dbReady = true;
         }
+ 
+      
+}
+        
+        
+
+        // funkce smazat
+  function smazZaznam(parametr)  {
+      
+    let ident = parametr.target.value;
+    
+    let transakce = db.transaction(["cachedForms"], 'readwrite');
+    let zaznam = transakce.objectStore('cachedForms');
+    
+    zaznam.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      
+      alert(cursor.value.id);
+      if (cursor) {
+        if (cursor.value.id < ident) {
+            cursor.continue();
+        }
+          
+        if(cursor.value.id == ident)  {
+          const request = cursor.delete();
+          request.onsuccess = () => {
+            alert("smazan zaznam   " + ident);
+          };
+        
+    
+      }
     }
+    
+    }
+
+  
+    //
+      
+  }
+  
 
         
         
  //zde si zpracujem to co jsme si poslali  input textem a predame do promenne
  function doText(par) {
      
-     predanejmeno =  par.target.value;
      
- }
-//  zde si zpracuju  file a pridam   jmeno a  vlozim do db
-    function doFile(e) {
-        console.log('change event fired for input field');
+     
+     
+     
+ let   predanejmeno =  par.target.value;
+
+
+document.getElementById("fotobox").style.display = "block";   //zobrazime si file input
+ 
+ document.getElementById("fotka").addEventListener('change', doFile, false);   //zde budeme poslouchat  az dodame file
+ 
+ //  zde si zpracuju  file a pridam   jmeno a  vlozim do db
+  
+
+  function doFile(e) {
+     
         let file = e.target.files[0];
-        
 
 
-        var reader = new FileReader();
+        let reader = new FileReader();
 
         reader.readAsBinaryString(file);
+     
+      
+      // zacatek funkce na vlozeni dat
+     
 
-        reader.onload = function(e) {
+      reader.onload = function(e) {
             //alert(e.target.result);
             let bits = e.target.result;
+            //zde si zjistime pocet zazanmu
+            const mnozstvi = db.transaction('cachedForms')
+                                           .objectStore('cachedForms')
+                                           .count();
+          
+          mnozstvi.onsuccess = function() {
+              
+              let identifikator = mnozstvi.result+1;
+         
+            
             let ob = {
+                id:identifikator,
                 jmeno:predanejmeno,
-                created:new Date(),
-                data:bits
+                data:bits,
+                created:new Date()
             };
 
-            let trans = db.transaction(['cachedForms'], 'readwrite');
+            let trans = db.transaction('cachedForms', 'readwrite');
             let addReq = trans.objectStore('cachedForms').add(ob);
 
             addReq.onerror = function(e) {
-                console.log('error storing data');
+                console.log('chyba při zpracování dat');
                 console.error(e);
             }
 
             trans.oncomplete = function(e) {
-                console.log('data stored');
+                console.log('data vložena');
             }
+            
+          }
         }
-    }
+        
+       //konec funkce  na vlozeni dat
 
+    
+    }  // konec funkce do file
+}  //konec funkce doText
 
     
     
