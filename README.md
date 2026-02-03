@@ -5,8 +5,8 @@ aplikace je založena na html a javascriptu<br>
 
 indexovana databáze , která bude pracovat  s textovými o obrazovými daty<br>
 
-funkce, vkládání, hledání, vypsání, mazání <br>
+funkce  :   vkládání, vypsání, mazání <br>
 
-vlastnosti elemntu budou řešeny pomocí DOM <br>
+vlastnosti elementů budou řešeny pomocí DOM <br>
 
 obrázky budou vkládány přímo do IDB<br>
