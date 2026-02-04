@@ -1,342 +1,321 @@
 <!DOCTYPE html>
 <html>
-<head>
-    
-</head>
-<body onload="zaklad()">
-
-
-
-    
-    <script>
-//vykreslíme si nějaký interface
-
-
-
-function zaklad()  {
-    
-    let t = document.createElement("TITLE");
-    let h = document.createTextNode("WWWAP2025ZS-nemecmiros");
- 
- let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
- 
-    t.appendChild(h);
-    document.head.appendChild(t);
-    
-    
-    document.body.style.backgroundColor = "white";
-    
-    
-    let br = document.createElement("BR");
-    let hr = document.createElement("HR");
- 
- 
-    let h1 = document.createElement("h1");
-    
-    document.body.appendChild(h1);
-    h1.appendChild(h);
-    
-    document.body.appendChild(text1);
-    
-    
- 
-    let div1 = document.createElement("div");
-   
-   let div2 = document.createElement("div");
-    div2.setAttribute('id','fotobox');
-   
-   
-   let div3 = document.createElement("div");
-    div3.setAttribute('id','top');
-    
-    const node1 = document.createTextNode("jméno :  ");
-    
-    let policko1 =  document.createElement("input");
-    policko1.setAttribute('type', 'text');
-    policko1.setAttribute('name','jmeno');
-    policko1.setAttribute('id','jmeno');
-    policko1.setAttribute('placeholder','jmeno');
-    
- 
-    div1.appendChild(node1);
-    div1.appendChild(policko1);
-    
-    div1.after(br);
-    
-    
-    
-  
-    const node2 = document.createTextNode("fotografie :  ");
-    
-    let policko2 =  document.createElement("input");
-    policko2.setAttribute('type', 'file');
-    policko2.setAttribute('name','fotka');
-    policko2.setAttribute('id','fotka');
- 
-    div2.appendChild(node2);
-    div2.appendChild(policko2);
-  
-  
-
-
-   document.body.appendChild(div1);
-   document.body.appendChild(div2);
-   document.body.appendChild(div3);
-   div3.after(hr);
-   
-   
-   document.getElementById("fotobox").style.display="none";
-   
-   document.getElementById("jmeno").addEventListener('change', doText, false);
-
-
-   initDb();
-    }
-    
-    let db;
-    let dbVersion = 1;
-    let dbReady = false;
-
-
-
-    function initDb() {
-        let request = indexedDB.open('kartoteka', dbVersion);
-
-        request.onerror = function(e) {
-            console.error('Unable to open database.');
-        }
-
-        request.onsuccess = function(e) {
-            db = e.target.result;
-            console.log('db opened');
+    <head>
+        
+    </head>
+    <body onload="zaklad()">
+        
+        
+        
+        
+        <script>
+            //vykreslíme si nějaký interface
             
             
             
-  
-  //  zjistim si pocatecni  hodnotu  id
-  let objectStore = db.transaction("cachedForms").objectStore("cachedForms");
-  objectStore.openCursor().onsuccess = event => {
-   let cursor = event.target.result;
-     
-    let pocatek = cursor.key;
-    
-   
-   
- 
-const dotaz = db.transaction('cachedForms')
-                               .objectStore('cachedForms')
-                               .count();
-                 
+            function zaklad()  {
+                
+                let t = document.createElement("TITLE");
+                let h = document.createTextNode("WWWAP2025ZS-nemecmiros");
+                
+                let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
+                
+                
+                t.appendChild(h);
+                document.head.appendChild(t);
+                
+                
+                document.body.style.backgroundColor = "white";
+                
+                
+                let br = document.createElement("BR");
+                let hr = document.createElement("HR");
+                
+                
+                let h1 = document.createElement("h1");
+                
+                document.body.appendChild(h1);
+                h1.appendChild(h);
+                
+                document.body.appendChild(text1);
+                
+                
+                
+                let div1 = document.createElement("div");
+                
+                let div2 = document.createElement("div");
+                div2.setAttribute('id','fotobox');
+                
+                
+                let div3 = document.createElement("div");
+                div3.setAttribute('id','top');
+                
+                const node1 = document.createTextNode("zadej jméno :  ");
+                
+                let policko1 =  document.createElement("input");
+                policko1.setAttribute('type', 'text');
+                policko1.setAttribute('name','jmeno');
+                policko1.setAttribute('id','jmeno');
+                policko1.setAttribute('placeholder','jmeno');
+                
+                
+                div1.appendChild(node1);
+                div1.appendChild(policko1);
+                
+                div1.after(br);
+                
+                
+                
+                
+                const node2 = document.createTextNode("nahraj  fotografii :  ");
+                
+                let policko2 =  document.createElement("input");
+                policko2.setAttribute('type', 'file');
+                policko2.setAttribute('name','fotka');
+                policko2.setAttribute('id','fotka');
+                
+                div2.appendChild(node2);
+                div2.appendChild(policko2);
+                
+                
+                
+                
+                document.body.appendChild(div1);
+                document.body.appendChild(div2);
+                document.body.appendChild(div3);
+                div3.after(hr);
+                
+                
+                document.getElementById("fotobox").style.display="none";
+                
+                document.getElementById("jmeno").addEventListener('change', doText, false);
+                
+                
+                initDb();
+            }
+            
+            
+            let db;
+            let dbVersion = 1;
+            let dbReady = false;
+            
+            
+            
+            function initDb() {
+                let request = indexedDB.open('kartoteka', dbVersion);
+                
+                request.onerror = function(e) {
+                    console.error('Unable to open database.');
+                }
+                
+                request.onsuccess = function(e) {
+                    db = e.target.result;
+                    console.log('db opened');
+                    
+                    
+                    
+                    
+                    //  zjistim si pocatecni  hodnotu  id
+                    let objectStore = db.transaction("cachedForms").objectStore("cachedForms");
+                    objectStore.openCursor().onsuccess = event => {
+                        let cursor = event.target.result;
+                        if(cursor)  {
+                            
+                            const ckey = cursor.key;
+                    
+                            
                                    
-                        dotaz.onsuccess  = function() {
-                            //vytvorim pomocnou konecna ktera mi stanovi posledni id
-                                let konecna = dotaz.result+pocatek;
-                                  
-                                   
-                                   for(let i = pocatek; i<konecna; i++)  {
+                                        let osoba = cursor.value;
+                                        let para = document.createElement("p");
+                                        
+                                        let br = document.createElement("BR");
+                                        let hr = document.createElement("HR");
+                                        para.setAttribute("id", "odstavec"+ckey);
+                                        para.style.zIndex = "1";
+                                        
                                        
-                                       const idquery = db.transaction('cachedForms')
-                                       .objectStore('cachedForms')
-                                       .get(i);
-                                       
-                                       
-                                       
-                                       //console.log(idquery);
-                                       idquery.onsuccess = function(){
+                                      
                                            
-                                           
-                                           
-                                           //  console.log("idquery",idquery.result);
-                                           let osoba = idquery.result;
-                                           let para = document.createElement("p");
-                                           
-                                           let br = document.createElement("BR");
-                                           let hr = document.createElement("HR");
-                                           para.setAttribute("id", "odstavec"+i);
-                                           para.style.zIndex = "1";
-                                           
-                                           
-                                           //podminka jestli existuje jmeno
-                                           if(!osoba.jmeno)  {
-                                              
-                                            para.innerHTML="noname";
-                                               
-                                           } else {
-                                           para.innerHTML=osoba.jmeno;
-                                         
-                                           }
-                                           
-                                           document.body.appendChild(para);
-                                           let fot = document.createElement("IMG");
-                                           let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
-                                           fot.setAttribute("src", odata);
-                                           fot.setAttribute("width", "300");
-                                           fot.setAttribute("height", "200");
-                                           fot.setAttribute("alt", osoba.jmeno);
-                                           para.appendChild(fot);
-                                           
-                                           let smaz =  document.createElement("button");
-                                           let popis1 = document.createTextNode("smaž");
-                                           smaz.setAttribute('type','button');
-                                           smaz.setAttribute('id','smaz'+i);
-                                           smaz.setAttribute('value',i);
-                                           
-                                           smaz.appendChild(popis1);
-                                           
-                                           para.appendChild(smaz);
-                                           
-                                           para.appendChild(br);
-                                         
-                                            document.getElementById('odstavec'+i).appendChild(hr);
+                                        if(!osoba.jmeno)  {
                                             
-                                            document.getElementById("smaz"+i).addEventListener('click', smazZaznam);
-                                          
-                                       }
-                                       //konec for cyklu
-                                   }
-                                   
-                                 //konec funkce dotaz
-                               }
-
-            //konec  zjisteni hodnoty id
+                                            para.innerHTML="noname";
+                                            
+                                        } else {
+                                            para.innerHTML=osoba.jmeno;
+                                            
+                                        }
+                                        
+                                        document.body.appendChild(para);
+                                        let fot = document.createElement("IMG");
+                                        let odata =  'data:image/jpeg;base64,' + btoa(osoba.data);
+                                        fot.setAttribute("src", odata);
+                                        fot.setAttribute("width", "300");
+                                        fot.setAttribute("height", "200");
+                                        fot.setAttribute("alt", osoba.jmeno);
+                                        para.appendChild(fot);
+                                        
+                                        let smaz =  document.createElement("button");
+                                        let popis1 = document.createTextNode("smaž");
+                                        smaz.setAttribute('type','button');
+                                        smaz.setAttribute('id','smaz'+ckey);
+                                        smaz.setAttribute('value',ckey);
+                                        
+                                        smaz.appendChild(popis1);
+                                        
+                                        para.appendChild(smaz);
+                                        
+                                        para.appendChild(br);
+                                        
+                                        document.getElementById('odstavec'+ckey).appendChild(hr);
+                                        
+                                        document.getElementById("smaz"+ckey).addEventListener('click', smazZaznam);
+                                       
+                                       cursor.continue();
+            
                     }
+                   }
+                    
+                    
+                }
+                
+                
+                request.onupgradeneeded = function(e) {
+                    let db = e.target.result;
+                    let  item = db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
+                 
+                    
+                    
+                    dbReady = true;
+                }
+                
+       }
+           
             
-
-
-        }
-    
-        
-        request.onupgradeneeded = function(e) {
-            let db = e.target.result;
-            db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
-            dbReady = true;
-        }
- 
-      
-}
-        
-        
-
-        // funkce smazat
-  function smazZaznam(parametr)  {
-      
-    let ident = parametr.target.value;
-    
-    let transakce = db.transaction(["cachedForms"], 'readwrite');
-    let zaznam = transakce.objectStore('cachedForms');
-    
-    zaznam.openCursor().onsuccess = (event) => {
-      const cursor = event.target.result;
-      
-      alert(cursor.value.id);
-      if (cursor) {
-        if (cursor.value.id < ident) {
-            cursor.continue();
-        }
-          
-        if(cursor.value.id == ident)  {
-          const request = cursor.delete();
-          request.onsuccess = () => {
-            alert("smazan zaznam   " + ident);
-          };
-        
-    
-      }
-    }
-    
-    }
-
-  
-    //
-      
-  }
-  
-
-        
-        
- //zde si zpracujem to co jsme si poslali  input textem a predame do promenne
- function doText(par) {
-     
-     
-     
-     
-     
- let   predanejmeno =  par.target.value;
-
-
-document.getElementById("fotobox").style.display = "block";   //zobrazime si file input
- 
- document.getElementById("fotka").addEventListener('change', doFile, false);   //zde budeme poslouchat  az dodame file
- 
- //  zde si zpracuju  file a pridam   jmeno a  vlozim do db
-  
-
-  function doFile(e) {
-     
-        let file = e.target.files[0];
-
-
-        let reader = new FileReader();
-
-        reader.readAsBinaryString(file);
-     
-      
-      // zacatek funkce na vlozeni dat
-     
-
-      reader.onload = function(e) {
-            //alert(e.target.result);
-            let bits = e.target.result;
-            //zde si zjistime pocet zazanmu
-            const mnozstvi = db.transaction('cachedForms')
-                                           .objectStore('cachedForms')
-                                           .count();
-          
-          mnozstvi.onsuccess = function() {
-              
-              let identifikator = mnozstvi.result+1;
-         
             
-            let ob = {
-                id:identifikator,
-                jmeno:predanejmeno,
-                data:bits,
-                created:new Date()
-            };
-
-            let trans = db.transaction('cachedForms', 'readwrite');
-            let addReq = trans.objectStore('cachedForms').add(ob);
-
-            addReq.onerror = function(e) {
-                console.log('chyba při zpracování dat');
-                console.error(e);
+            
+            // funkce smazat
+            function smazZaznam(parametr)  {
+                
+                let ident = parametr.target.value;
+           
+             
+                let transakce = db.transaction(["cachedForms"], 'readwrite');
+                let zaznam = transakce.objectStore('cachedForms');
+                
+                
+                
+                zaznam.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    
+                    
+                    if (cursor) {
+                        if (cursor.key < ident) {
+                            cursor.continue();
+                        }
+                        
+                        if(cursor.key == ident)  {
+                            const request = cursor.delete();
+                            request.onsuccess = () => {
+                                alert("smazan zaznam   " + ident);
+                                location.reload();
+                            };
+                            
+                            
+                        }
+                    }
+                    
+                }
+                
+                
+                //
+                
             }
+            //konec smazani
+            
+  
 
-            trans.oncomplete = function(e) {
-                console.log('data vložena');
+            
+            //zde si zpracujem to co jsme si poslali  input textem a predame do promenne
+            function doText(par) {
+                
+
+                let   predanejmeno =  par.target.value;
+                
+                
+                document.getElementById("fotobox").style.display = "block";   //zobrazime si file input
+                
+                document.getElementById("fotka").addEventListener('change', doFile);   //zde budeme poslouchat  az dodame file
+                
+                //  zde si zpracuju  file a pridam   jmeno a  vlozim do db
+                
+                
+                function doFile(e) {
+                    
+                    let file = e.target.files[0];
+                    
+                    
+                    let reader = new FileReader();
+                    
+                    reader.readAsBinaryString(file);
+                    
+                    
+                    // zacatek funkce na vlozeni dat
+                    
+                    
+                    reader.onload = function(e) {
+                      
+                        let bits = e.target.result;
+             
+                    
+                            
+                            let ob = {
+                              
+                                jmeno:predanejmeno,
+                                data:bits,
+                                created:new Date()
+                            };
+                            
+                            let trans = db.transaction('cachedForms', 'readwrite');
+                            let zaznamenej = trans.objectStore('cachedForms').add(ob);
+   
+                            
+                            
+                            zaznamenej.onerror = function(e) {
+                                console.log('chyba při zpracování dat');
+                                
+                               
+                                console.error(e);
+                            }
+                            
+                            zaznamenej.oncomplete = function(e) {
+                                console.log('data vložena');
+                               
+                               
+                            }
+                            
+                        
+                  
+                    
+                    //konec funkce  na vlozeni dat
+                 
+                    
+                }  // konec funkce do file
+            }  //konec funkce doText
+                
+                
+            
+            
             }
             
-          }
-        }
+            
+            
+        </script>
         
-       //konec funkce  na vlozeni dat
-
-    
-    }  // konec funkce do file
-}  //konec funkce doText
-
-    
-    
-    
-    
-    
-</script>
-    
-    
-    
-    
-    
-  </body>
+        
+        
+        
+        
+    </body>
     
 </html>
-    
+
