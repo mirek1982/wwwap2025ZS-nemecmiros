@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+     <meta charset="UTF-8">
     </head>
     <body onload="zaklad()">
         
@@ -18,11 +18,15 @@
                 let t = document.createElement("TITLE");
                 let h = document.createTextNode("WWWAP2025ZS-nemecmiros");
                 
-                let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
+                let met = document.createElement("META");
+                met.setAttribute('charset','UTF-8');
+ 
+ let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
                 
                 
                 t.appendChild(h);
                 document.head.appendChild(t);
+                document.head.appendChild(met);
                 
                 
                 document.body.style.backgroundColor = "white";
