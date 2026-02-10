@@ -1,0 +1,12 @@
+img {padding-left:5px; margin-right: 20px; padding-top:10px; left: 10px; position: relative;}
+p  {text-align: left; font-size: 24pt; color: white; background-color: black; height: 300px;}
+p:nth-child(even) {background-color: dimgray;}
+
+* {font-family: "Lucida Console", "Courier New", monospace;}
+
+
+
+button {background-color: #04AA6D; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px;
+margin: 4px 2px;cursor: pointer; ;}
+
+

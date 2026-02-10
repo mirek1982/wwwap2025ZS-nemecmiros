@@ -26,6 +26,7 @@
             let br = document.createElement("BR");
             let hr = document.createElement("HR");
             para.setAttribute("id", "odstavec"+ckey);
+            para.setAttribute("class", "zOdst");
             para.style.zIndex = "1";
         
             if(!osoba.jmeno)  {
@@ -44,6 +45,7 @@
             fot.setAttribute("src", odata);
             fot.setAttribute("width", "300");
             fot.setAttribute("height", "200");
+            fot.setAttribute("id", "zFoto");
             fot.setAttribute("alt", osoba.jmeno);
             para.appendChild(fot);
             
