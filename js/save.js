@@ -17,11 +17,11 @@ function   saveRecord(vstup)   {
     let trans = db.transaction('cachedForms', 'readwrite');
     let zaznamenej = trans.objectStore('cachedForms').add(ob);
     
-    zaznamenej.onerror = function(e) {
+    zaznamenej.onerror = (event) => {
         console.log('chyba při zpracování dat');
-        console.error(e);
+       
     }
-    zaznamenej.oncomplete = function(e) {
+    zaznamenej.onsuccess = (event) => {
         console.log('data vložena');
         
     }

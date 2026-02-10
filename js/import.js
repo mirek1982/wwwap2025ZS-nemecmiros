@@ -15,23 +15,16 @@
      
     reader.onload = function(e) {
         
-        let json = JSON.parse(e.target.result);
-    
-        let ob = {
-            
-            jmeno:json.jmeno,
-            data: json.data,
-            created:json.created
-        };
-        
+        let ob = JSON.parse(e.target.result);
+  
         let trans = db.transaction('cachedForms', 'readwrite');
         let zaznamenej = trans.objectStore('cachedForms').add(ob);
  
-        zaznamenej.onerror = function() {
+        zaznamenej.onerror = (event) => {
             console.log('chyba při zpracování dat');
 
         }
-        zaznamenej.oncomplete = function() {
+        zaznamenej.onsuccess =  (event) => {
             console.log('data vložena');
         
         }
