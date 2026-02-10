@@ -16,9 +16,7 @@
     reader.onload = function(e) {
         
         let json = JSON.parse(e.target.result);
-        
-        
-        
+    
         let ob = {
             
             jmeno:json.jmeno,
@@ -28,23 +26,16 @@
         
         let trans = db.transaction('cachedForms', 'readwrite');
         let zaznamenej = trans.objectStore('cachedForms').add(ob);
-        
-        
-        
+ 
         zaznamenej.onerror = function() {
             console.log('chyba při zpracování dat');
-            
-            
-          
+
         }
-        
         zaznamenej.oncomplete = function() {
             console.log('data vložena');
-            
-            
+        
         }
-        
-        
+ 
     }
 }
         

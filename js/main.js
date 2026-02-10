@@ -8,13 +8,11 @@
 
 
     function zaklad()  {
- 
-        
+    
         let text1 = document.createTextNode("Aplikace kartotéka je aplikace pro ukládání dat do indexované databáze v prohlížeči. Do formuláře níže zadejte jméno a poté se zobrazí možnost vložit obrazový soubor. Tyto data se uloží  v json formátu do indexované databáze.  Všechna data jsou automaticky vypsána pokud nějaké existují.");
   
         document.body.style.backgroundColor = "white";
-        
-        
+      
         let br = document.createElement("BR");
         let hr = document.createElement("HR");
         
@@ -118,6 +116,3 @@ function initDb() {
     }
 }
     
-
-    
-

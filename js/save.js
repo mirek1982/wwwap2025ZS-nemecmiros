@@ -11,8 +11,7 @@
 
 function   saveRecord(vstup)   {
 
-    console.log(vstup);
- 
+
  const   ob = JSON.parse(vstup);
     
     let trans = db.transaction('cachedForms', 'readwrite');
