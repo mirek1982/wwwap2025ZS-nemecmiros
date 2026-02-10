@@ -7,19 +7,12 @@
 
 //funkce import
 
-export default function nalejTotu(e) {
+ function importuj() {
     
-    let file = e.target.files[0];
-    
-    
+    let file = this.files[0];
     let reader = new FileReader();
-    
     reader.readAsText(file);
-    
-    
-    // zacatek funkce na vlozeni dat
-    
-    
+     
     reader.onload = function(e) {
         
         let json = JSON.parse(e.target.result);
@@ -38,14 +31,14 @@ export default function nalejTotu(e) {
         
         
         
-        zaznamenej.onerror = function(e) {
+        zaznamenej.onerror = function() {
             console.log('chyba při zpracování dat');
             
             
-            console.error(e);
+          
         }
         
-        zaznamenej.oncomplete = function(e) {
+        zaznamenej.oncomplete = function() {
             console.log('data vložena');
             
             

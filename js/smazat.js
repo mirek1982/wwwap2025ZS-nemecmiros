@@ -8,11 +8,9 @@
 
 
 // funkce smazat
-export default function smazZaznam(parametr)  {
+function smazat()  {
     
-    let ident = parametr.target.value;
-    
-    
+  
     let transakce = db.transaction(["cachedForms"], 'readwrite');
     let zaznam = transakce.objectStore('cachedForms');
     
@@ -23,14 +21,14 @@ export default function smazZaznam(parametr)  {
         
         
         if (cursor) {
-            if (cursor.key < ident) {
+            if (cursor.key < this.value) {
                 cursor.continue();
             }
             
-            if(cursor.key == ident)  {
+            if(cursor.key == this.value)  {
                 const request = cursor.delete();
                 request.onsuccess = () => {
-                    alert("smazan zaznam   " + ident);
+                    alert("smazan zaznam   " + this.value);
                     location.reload();
                 };
                 

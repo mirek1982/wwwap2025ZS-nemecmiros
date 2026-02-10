@@ -4,7 +4,9 @@
 //
 //  Created by Miroslav Němec on 06.02.2026.
 //
-    
+
+
+
     function zaklad()  {
  
         
@@ -79,8 +81,11 @@
         div3.after(hr);
  
         document.getElementById("fotobox").style.display="none";
-        document.getElementById("jmeno").addEventListener('change', doText, false);
-        document.getElementById("importace").addEventListener('change', nalejTotu, false);
+        
+
+        document.getElementById("jmeno").addEventListener('change',zpracujText, false);
+        
+        document.getElementById("importace").addEventListener('change', importuj, false);
         
         initDb();
     }
@@ -101,16 +106,7 @@ function initDb() {
     db = e.target.result;
     console.log('db opened' + db);
   
-        
-        let modul1= document.createElement("SCRIPT");
-
-        modul1.setAttribute('type','module');
-
-        let h1=document.createTextNode("import vypis from './js/vypis.js';vypis();");
-
-        modul1.appendChild(h1);
-
-        document.body.appendChild(modul1);
+ vypis();
  
     }
 
@@ -123,42 +119,5 @@ function initDb() {
 }
     
 
-
-let modul2= document.createElement("SCRIPT");
-modul2.setAttribute('type','module');
-let h2=document.createTextNode("import downloadTextFile from './js/backup.js';downloadTextFile;");
-modul2.appendChild(h1);
-document.body.appendChild(modul2);
     
-    
- 
-let modul3= document.createElement("SCRIPT");
-modul3.setAttribute('type','module');
-let h3=document.createTextNode("import nalejTotu from './js/import.js';nalejTou();");
-modul3.appendChild(h1);
-document.body.appendChild(modul3);
-
-
-let modul4= document.createElement("SCRIPT");
-modul4.setAttribute('type','module');
-let h4=document.createTextNode("import doText from './js/import.js';doText();");
-modul4.appendChild(h1);
-document.body.appendChild(modul4);
-    
-   
-let modul5= document.createElement("SCRIPT");
-modul5.setAttribute('type','module');
-let h5=document.createTextNode("import smazZaznam from './js/smazat.js';smazZaznam();");
-modul5.appendChild(h1);
-document.body.appendChild(modul5);
- 
-        
-        
-        
-        
-   
-    
-    
-    
-
 

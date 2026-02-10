@@ -1,48 +1,25 @@
-export default function  vypis() {
-    
-  
- 
-    
-    
+ function  vypis() {
+
     let objectStore = db.transaction("cachedForms").objectStore("cachedForms");
     objectStore.openCursor().onsuccess = event => {
         let cursor = event.target.result;
         
         if(cursor)  {
-            
             const ckey = cursor.key;
-            
             let osoba = cursor.value;
             
             //export dat z databaze
             let textovadata = "{";
-            let keys = Object.keys(osoba);
-            let pocethodnot = keys.length;
-            
-            
-            for (let i = 0; i < pocethodnot; i++)  {
+            for (let [keys, value] of Object.entries(osoba)) {
+              textovadata +='"' + keys + '":"' + value + '"';
                 
                 
-                
-                if (Object.keys(osoba)[i] == "data"){
-                    
-                    textovadata += '"' + Object.keys(osoba)[i]  + '":"' + Object.values(osoba)[i] + '"';
-                }  else  {   textovadata += '"' + Object.keys(osoba)[i]  + '":"' + Object.values(osoba)[i] + '"';}
-                
-                
-                
-                
-                
-                
-                
-                if (i <= pocethodnot-2) { textovadata += ',' ;}
             }
+            //tohle to ddam pryč a použiju metodu objekt entries
             
-            textovadata += '}\n';
-            // konec exportu
-            
-            
-            
+             textovadata += "}";
+      
+            textovadata =  textovadata.replace(/""/g,'","');
             
             let para = document.createElement("p");
             
@@ -50,10 +27,7 @@ export default function  vypis() {
             let hr = document.createElement("HR");
             para.setAttribute("id", "odstavec"+ckey);
             para.style.zIndex = "1";
-            
-            
-            
-            
+        
             if(!osoba.jmeno)  {
                 
                 para.innerHTML="noname";
@@ -82,17 +56,14 @@ export default function  vypis() {
             
             
             let zalohuj = document.createElement('BUTTON');
-            
             zalohuj.setAttribute('value',textovadata );
             zalohuj.setAttribute('type','button');
             zalohuj.setAttribute('id','button');
-            
             let zalohujpopis = document.createTextNode('zálohuj');
-            
             
             zalohuj.appendChild(zalohujpopis);
             
-            zalohuj.addEventListener("click", downloadTextFile);
+            zalohuj.addEventListener("click", backup);
             
             smaz.appendChild(popis1);
             
@@ -102,17 +73,9 @@ export default function  vypis() {
             
             document.getElementById('odstavec'+ckey).appendChild(hr);
             
-            document.getElementById("smaz"+ckey).addEventListener('click', smazZaznam);
-            
+            document.getElementById("smaz"+ckey).addEventListener('click', smazat);
             cursor.continue();
-            
-            
-            
+                                    
         }
-        
     }
-    
 }
-
-    
-    
