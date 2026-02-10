@@ -20,11 +20,11 @@
         let trans = db.transaction('cachedForms', 'readwrite');
         let zaznamenej = trans.objectStore('cachedForms').add(ob);
  
-        zaznamenej.onerror = (event) => {
+        zaznamenej.onerror = () => {
             console.log('chyba při zpracování dat');
 
         }
-        zaznamenej.onsuccess =  (event) => {
+        zaznamenej.onsuccess = () => {
             console.log('data vložena');
         
         }
